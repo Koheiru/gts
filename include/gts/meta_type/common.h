@@ -7,12 +7,8 @@ namespace gts
 // ----------------------------------------------------------------------------
 //                              value meta type
 // ----------------------------------------------------------------------------
-template <class ...Args>
-struct value;
-
-// ----------------------------------------------------------------------------
-template <class T>
-struct value<T>
+template <class T, class ...Args>
+struct value
 {
     using target = T;
 };
@@ -20,14 +16,10 @@ struct value<T>
 // ----------------------------------------------------------------------------
 //                          meta type redirector
 // ----------------------------------------------------------------------------
-template <class ...Args>
-struct meta_type;
-
-// ----------------------------------------------------------------------------
-template <class T>
-struct meta_type<T>
+template <class T, class ...Args>
+struct meta_type
 {
-    using value = typename value<T>;
+    using value = typename value<T, Args...>;
 };
 
 } // namespace gts

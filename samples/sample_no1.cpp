@@ -1,4 +1,7 @@
+#include <iostream>
 #include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <gts/json.h>
 
 //// ----------------------------------------------------------------------------
 ////                              Complex data
@@ -95,8 +98,42 @@
 //}
 
 // ----------------------------------------------------------------------------
+struct TestItem
+{
+    std::uint32_t   id;
+    std::string     name;
+    bool            enabled;
+    double          value;
+};
+
+GTS_OBJECT(TestItem,
+    GTS_MEMBER(id,      "id")
+    GTS_MEMBER(name,    "name")
+    GTS_MEMBER(enabled, "enabled")
+    GTS_MEMBER(value,   "value")
+)
+
+// ----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+    std::string buffer;
+    gts::json<gts::value<bool>>::serialize(false, std::back_inserter(buffer)); buffer += " ";
+    gts::json<gts::value<signed int>>::serialize(23, std::back_inserter(buffer)); buffer += " ";
+    gts::json<gts::value<unsigned long int>>::serialize(23, std::back_inserter(buffer)); buffer += " ";
+    gts::json<gts::value<float>>::serialize(23, std::back_inserter(buffer)); buffer += " ";
+    gts::json<gts::value<double>>::serialize(23, std::back_inserter(buffer)); buffer += " ";
+    gts::json<gts::value<std::string>>::serialize(std::string("46"), std::back_inserter(buffer)); buffer += " ";
+    gts::json<gts::value<std::wstring>>::serialize(std::wstring(L"46"), std::back_inserter(buffer)); buffer += " ";
+
+    buffer += "\r\n";
+    gts::json<gts::array<std::vector<int>>>::serialize({ 23, 46, 72 }, std::back_inserter(buffer)); buffer += "\r\n";
+    gts::json<gts::array<std::list<std::string>>>::serialize({ std::string("123") }, std::back_inserter(buffer)); buffer += "\r\n";
+
+    gts::json<gts::dictionary<std::map<std::string, int>>>::serialize({ {"id_1", 23}, {"id_2", 46} }, std::back_inserter(buffer)); buffer += "\r\n";
+
+    gts::json<meta_type_TestItem::value>::serialize({ 54, std::string("item 54"), false, 87.5 }, std::back_inserter(buffer));
+
+    std::cout << buffer << std::endl;
 
     //run_test<TestMeta>("TestSuite", Test{ 32, std::string("obj 32"), true });
     //run_test<TestSuiteMeta>("TestSuite",

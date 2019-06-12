@@ -17,7 +17,7 @@ template <class Key, class Value>
 struct field_traits<std::pair<Key, Value>, void>
 {
     using item_type  = std::pair<Key, Value>;
-    using key_type   = Key;
+    using key_type   = typename std::remove_const<Key>::type;
     using value_type = Value;
 
     static key_type& key_ref(item_type& item) { return static_cast<key_type&>(item.first); };

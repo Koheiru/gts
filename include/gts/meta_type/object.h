@@ -8,12 +8,12 @@
 // ----------------------------------------------------------------------------
 #define GTS_NAME(field) \
     struct BOOST_PP_CAT(n_, field) { \
-        static constexpr const char* const value = #field; \
+        static constexpr const char value[] = #field; \
     };
 
 #define GTS_NAME_EX(field, name) \
     struct BOOST_PP_CAT(n_, field) { \
-        static constexpr const char* const value = name; \
+        static constexpr const char value[] = name; \
     };
 
 // ----------------------------------------------------------------------------
